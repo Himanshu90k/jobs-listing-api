@@ -1,0 +1,16 @@
+{
+  "name": "jobs-listing-api",
+  "version": "1.0.0",
+  "description": "'api for jobs-listing'",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server",
+    "dev": "node --watch --env-file=.env server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
