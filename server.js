@@ -2,8 +2,12 @@ import express from 'express';
 import jobs from './routes/jobs.js';
 import errorHandler from './middleware/error.js';
 import notFound from './middleware/notFound.js';
+import cors from 'cors';
 const app = express();
 const port = process.env.PORT || 8000;
+
+// cross origin resource sharing
+app.use(cors());
 
 // Body Parser Middleware
 app.use(express.json());

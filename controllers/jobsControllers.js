@@ -1,17 +1,24 @@
-import { jobs } from "./jobsList.js";
+// import { jobs } from "./jobsList.js";
+import db from '../db/connection.js';
+import { ObjectId } from "mongodb";
 
 //@desc   Get all jobs
 //@route  GET /api/jobs
-export const getJobs = (req, res, next) => {
+export const getJobs = async (req, res, next) => {
+
+    const collection = await db.collection("jobsList");
+    const results = await collection.find({jobs:{}}).toArray();
+    console.log(results);
+
     const limit = parseInt(req.query.limit);
 
     if(!isNaN(limit) && limit > 0 ) {
         return res
             .status(200)
-            .json(jobs.slice(0, limit));
+            .json(results.slice(0, limit));
     }
 
-    res.status(200).json(jobs);
+    res.status(200).json(results);
 };
 
 //@desc   Get single job
