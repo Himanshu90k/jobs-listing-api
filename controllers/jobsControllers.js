@@ -45,7 +45,7 @@ export const createJob = async (req, res, next) => {
     try {
         let collection = db.collection("jobs");
         let newJob = {
-            id: collection.length() + 1,
+            id: collection.totalSize() + 1,
             title: req.body.title,
             type: req.body.type,
             description: req.body.description,
