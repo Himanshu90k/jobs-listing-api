@@ -40,43 +40,87 @@ export const getJob = async (req, res, next) => {
 
 //@desc   Create new Job
 //@route  POST /api/jobs
-export const createJob = (req, res, next) => {
-    console.log(req.body);
+export const createJob = async (req, res, next) => {
+    
+    try {
+        let collection = db.collection("jobs");
+        let newJob = {
+            id: collection.length() + 1,
+            title: req.body.title,
+            type: req.body.type,
+            description: req.body.description,
+            location: req.body.location,
+            salary: req.body.salary,
+            company: {
+                name: req.body.company.name,
+                description: req.body.company.description,
+                contactEmail: req.body.company.contactEmail,
+                contactPhone: req.body.company.contactPhone,
+            },
+        };
 
-    // check for all the details
-    res.status(201).json(req.body);
+        let result = collection.insertOne(newJob);
+        res.status(201).json(result);
+    } catch(err) {
+        console.error(err);
+        let error = new Error('Error sending data');
+        error.status = 400;
+        console.log(req.body);
+        return next(error);
+    }
+    
 };
 
 //@desc   Update jobs
 //@route  PUT /api/jobs/:id
-export const updateJob = (req, res, next) => {
-    const id = parseInt(req.params.id)
-    const job = jobs.find( (job) => job.id === id);
+export const updateJob = async (req, res, next) => {
+    try {
+        const query = {id: parseInt(req.params.id)};
+        const updates = {
+            $set: {
+                title: req.body.title,
+                type: req.body.type,
+                description: req.body.description,
+                location: req.body.location,
+                salary: req.body.salary,
+                company: {
+                    name: req.body.company.name,
+                    description: req.body.company.description,
+                    contactEmail: req.body.company.contactEmail,
+                    contactPhone: req.body.company.contactPhone,
+                },
+            },
+        };
 
-    if(!job) {
-        const error = new Error(`The job with ${id} is not found`);
-        error.status = 404;
+        let collection = db.collection("jobs");
+        let result = await collection.updateOne(query, updates);
+        res.status(200).send(result);
+    } catch(err) {
+        console.error(err);
+        const error = new Error('Error Updating the Record');
+        error.status = 500;
         return next(error);
     }
-
-    job.id = id;
-    job.title= req.body.title;
-
+    
     
 };
 
 //@desc   Delete jobs
 //@route  DELETE /api/jobs/:id
-export const deleteJob = (req, res, next) => {
-    const id = parseInt(req.params.id);
-    const job = jobs.find( (job) => job.id === id);
+export const deleteJob = async (req, res, next) => {
+    
+    try {
+        const query = {id : parseInt(req.params.id)};
 
-    if(!job) {
-        const error = new Error(`The job with id ${id} is not found`);
-        error.status = 404;
+        const collection = db.collection("jobs");
+        let result = await collection.deleteOne(query);
+
+        res.status(200).send(result);
+    } catch(err) {
+        console.error(err);
+        const error = new Error("Error Deleting Job");
+        error.status = 500;
         return next(error);
     }
 
-    jobs = jobs.filter( (job) => job.id !== id);
-    res.status(200).json(jobs);
 };
