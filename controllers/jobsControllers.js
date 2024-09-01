@@ -44,7 +44,6 @@ export const createJob = async (req, res, next) => {
     try {
         let collection = db.collection("jobs");
         let job = req.body;
-        console.log(req.body);
         let newJob = {
             title: job.title,
             type: job.type,
@@ -79,17 +78,20 @@ export const updateJob = async (req, res, next) => {
         console.log(req.body);
         let job = req.body;
         let updatedJob = {
-            title: job.title,
-            type: job.type,
-            description: job.description,
-            location: job.location,
-            salary: job.salary,
-            company: {
+            $set: {
+                title: job.title,
+                type: job.type,
+                description: job.description,
+                location: job.location,
+                salary: job.salary,
+                company: {
                 name: job.company.name,
                 description: job.company.description,
                 contactEmail: job.company.contactEmail,
                 contactPhone: job.company.contactPhone,
-            },
+                },
+            }
+            
         };
 
         let collection = db.collection("jobs");
