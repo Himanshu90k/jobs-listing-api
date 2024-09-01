@@ -29,7 +29,7 @@ export const getJob = async (req, res, next) => {
     const result = await collection.findOne(query);
 
     if(!result) {
-        const error = new Error(`The Job with ${id} is not found.`);
+        const error = new Error(`The Job with ${req.params.id} is not found.`);
         error.status = 404;
         return next(error);
     }
