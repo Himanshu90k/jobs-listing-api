@@ -23,11 +23,10 @@ export const getJobs = async (req, res, next) => {
 //@desc   Get single job
 //@route  GET /api/job/:id
 export const getJob = async (req, res, next) => {
-    const id = parseInt(req.params.id);
+    const query = {_id: new ObjectId(req.params.id)};
 
     const collection = db.collection("jobs");
-    const result = await collection.findOne({id: id});
-    console.log(result);
+    const result = await collection.findOne(query);
 
     if(!result) {
         const error = new Error(`The Job with ${id} is not found.`);
@@ -47,7 +46,6 @@ export const createJob = async (req, res, next) => {
         let job = req.body;
         console.log(req.body);
         let newJob = {
-            id: job.id,
             title: job.title,
             type: job.type,
             description: job.description,
@@ -77,11 +75,10 @@ export const createJob = async (req, res, next) => {
 //@route  PUT /api/jobs/:id
 export const updateJob = async (req, res, next) => {
     try {
-        const query = {id: parseInt(req.params.id)};
+        const query = {_id: new ObjectId(req.params.id) };
         console.log(req.body);
         let job = req.body;
         let updatedJob = {
-            id: job.id,
             title: job.title,
             type: job.type,
             description: job.description,
@@ -113,7 +110,7 @@ export const updateJob = async (req, res, next) => {
 export const deleteJob = async (req, res, next) => {
     
     try {
-        const query = {id : parseInt(req.params.id)};
+        const query = {_id: new ObjectId(req.params.id) };
 
         const collection = db.collection("jobs");
         let result = await collection.deleteOne(query);
