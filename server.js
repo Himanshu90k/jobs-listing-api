@@ -15,6 +15,7 @@ app.use(express.urlencoded( {extended: false} ));
 
 // Routes
 app.use('/api/jobs', jobs);
+app.use('/*', jobs);
 app.use(notFound);
 
 // ErrorHandler

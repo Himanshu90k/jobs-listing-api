@@ -44,18 +44,20 @@ export const createJob = async (req, res, next) => {
     
     try {
         let collection = db.collection("jobs");
+        let job = req.body;
+        console.log(req.body);
         let newJob = {
-            id: collection.totalSize() + 1,
-            title: req.body.title,
-            type: req.body.type,
-            description: req.body.description,
-            location: req.body.location,
-            salary: req.body.salary,
+            id: job.id,
+            title: job.title,
+            type: job.type,
+            description: job.description,
+            location: job.location,
+            salary: job.salary,
             company: {
-                name: req.body.company.name,
-                description: req.body.company.description,
-                contactEmail: req.body.company.contactEmail,
-                contactPhone: req.body.company.contactPhone,
+                name: job.company.name,
+                description: job.company.description,
+                contactEmail: job.company.contactEmail,
+                contactPhone: job.company.contactPhone,
             },
         };
 
@@ -76,24 +78,25 @@ export const createJob = async (req, res, next) => {
 export const updateJob = async (req, res, next) => {
     try {
         const query = {id: parseInt(req.params.id)};
-        const updates = {
-            $set: {
-                title: req.body.title,
-                type: req.body.type,
-                description: req.body.description,
-                location: req.body.location,
-                salary: req.body.salary,
-                company: {
-                    name: req.body.company.name,
-                    description: req.body.company.description,
-                    contactEmail: req.body.company.contactEmail,
-                    contactPhone: req.body.company.contactPhone,
-                },
+        console.log(req.body);
+        let job = req.body;
+        let updatedJob = {
+            id: job.id,
+            title: job.title,
+            type: job.type,
+            description: job.description,
+            location: job.location,
+            salary: job.salary,
+            company: {
+                name: job.company.name,
+                description: job.company.description,
+                contactEmail: job.company.contactEmail,
+                contactPhone: job.company.contactPhone,
             },
         };
 
         let collection = db.collection("jobs");
-        let result = await collection.updateOne(query, updates);
+        let result = await collection.updateOne(query, updatedJob);
         res.status(200).send(result);
     } catch(err) {
         console.error(err);
